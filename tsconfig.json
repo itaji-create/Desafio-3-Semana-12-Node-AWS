@@ -11,6 +11,11 @@
       "@types",
       "./node_modules/@types"
     ],
+    "paths": {
+      "@config/*": ["src/config/*"],
+      "@modules/*": ["src/modules/*"],
+      "@shared/*": ["src/shared/*"]
+    },
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowJs": true,
