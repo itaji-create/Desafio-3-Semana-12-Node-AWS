@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import User from '../models/user.model';
 import { registerUser } from '../controllers/users.controller';
+import validateUser from '../middlewares/user.validate';
 
 const usersRouter = Router();
 
-usersRouter.post('/sign-up', registerUser);
+usersRouter.post('/sign-up', validateUser, registerUser);
 
 usersRouter.get('/', async (req, res) => {
   try {
