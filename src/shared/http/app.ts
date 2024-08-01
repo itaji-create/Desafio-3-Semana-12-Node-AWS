@@ -1,29 +1,24 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
-import routes from './routes';
 import AppError from '@shared/errors/AppError';
+import routes from './routes';
+import mongoose from 'mongoose';
+import 'dotenv/config';
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.use(routes);
-
-app.use((error: Error, request: Request, response: Response) => {
-  if (error instanceof AppError) {
-    return response.status(error.statusCode).json({
-      statusCode: error.statusCode,
-      message: error.message,
-      error: error.error,
-    });
-  }
-
-  return response.status(500).json({
-    statusCode: 500,
-    message: 'Internal Server Error',
-    error: 'error',
+mongoose
+  .connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/data', {})
+  .then(() => {
+    console.log('Conectado ao MongoDB');
+  })
+  .catch((err) => {
+    console.error('Erro ao conectar ao MongoDB', err);
   });
-});
+
+app.use('/v1', routes);
 
 export default app;
