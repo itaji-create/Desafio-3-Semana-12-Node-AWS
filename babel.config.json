@@ -1,0 +1,16 @@
+{
+  "presets": [
+    ["@babel/preset-env", { "targets": "current node" }],
+    "@babel/preset-typescript"
+  ],
+  "plugins": [
+    ["module-resolver", {
+      "root": ["./src"],
+      "alias": {
+        "@config": "./src/config",
+        "@modules": "./src/modules",
+        "@shared": "./src/shared"
+      }
+    }]
+  ]
+}
