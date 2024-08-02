@@ -11,4 +11,9 @@ interface IUser extends Document {
   confirmPassword: string;
 }
 
-export type { IUser };
+interface ILoginParams {
+  email: string;
+  password: string;
+}
+
+export type { IUser, ILoginParams };
