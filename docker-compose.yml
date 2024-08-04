@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  mongo_db:
+    container_name: db_container
+    image: mongo:latest
+    restart: always
+    volumes:
+      - mongo_db:/data/db
+
+  mongo_express:
+    container_name: mongo_express
+    image: mongo-express:latest
+    restart: always
+    depends_on:
+      - mongo_db
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo_db
+
+  app:
+    build: .
+    command: npm run dev
+    restart: always
+    volumes:
+      - .:/app
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongo_db
+    environment:
+      MONGODB_URI: mongodb://mongo_db:27017/database
+      NODE_ENV: prod
+      PORT: 3000
+
+volumes:
+  mongo_db: {}
