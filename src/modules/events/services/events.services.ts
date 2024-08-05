@@ -1,7 +1,7 @@
 import { IEvent, IEventFilters } from '@shared/interfaces/event.interface';
 import Event from '../models/event.model';
 import AppError from '@shared/errors/AppError';
-import { FilterQuery, ObjectId } from 'mongoose';
+import mongoose, { FilterQuery, ObjectId } from 'mongoose';
 
 export const getEvents = async (filters: IEventFilters): Promise<IEvent[]> => {
   const { dayOfWeek, description } = filters;
@@ -24,6 +24,9 @@ export const getEvents = async (filters: IEventFilters): Promise<IEvent[]> => {
 };
 
 export const getEventById = async (id: string) => {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw new AppError('Invalid ID format', 400, 'Bad Request');
+  }
   const event = await Event.findOne({ _id: id });
 
   if (!event) throw new AppError('Event Not found', 404, 'Not Found');
@@ -44,6 +47,10 @@ export const createEvent = async (event: IEvent, userId: ObjectId) => {
 };
 
 export const deleteEventById = async (id: string) => {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw new AppError('Invalid ID format', 400, 'Bad Request');
+  }
+
   await getEventById(id);
 
   await Event.deleteOne({ _id: id });

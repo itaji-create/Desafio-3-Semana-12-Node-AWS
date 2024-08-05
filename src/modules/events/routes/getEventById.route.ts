@@ -30,6 +30,12 @@ router.get('/:id', authenticateToken, getEventById);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Event'
+ *       400:
+ *         description: Invalid ID supplied
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  *       401:
  *         description: Unauthorized
  *         content:
