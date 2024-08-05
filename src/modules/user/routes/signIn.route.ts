@@ -9,99 +9,41 @@ router.post('/sign-in', signIn);
  * @openapi
  * /users/sign-in:
  *   post:
- *     summary: Login de usuário
- *     description: Faz o login de um usuário com base no e-mail e senha fornecidos e retorna informações do usuário.
+ *     summary: Login of an existing user
+ *     description: Logs in a user based on the provided email and password and returns user information.
+ *     tags:
+ *       - Users
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               email:
- *                 type: string
- *                 format: email
- *                 example: "exemplo@example.com"
- *                 description: Endereço de e-mail do usuário.
- *               password:
- *                 type: string
- *                 example: "password123"
- *                 description: Senha do usuário.
- *             required:
- *               - email
- *               - password
+ *             $ref: '#/components/schemas/UserSignIn'
  *     responses:
  *       200:
- *         description: Login bem-sucedido, retorna informações do usuário.
+ *         description: User logged in successfully
  *         headers:
  *           Authorization:
  *             description: Authorization header
  *             schema:
  *               type: string
- *               example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *               example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 firstName:
- *                   type: string
- *                   example: "Fulano"
- *                   description: Nome do usuário.
- *                 lastName:
- *                   type: string
- *                   example: "de Tal"
- *                   description: Sobrenome do usuário.
- *                 email:
- *                   type: string
- *                   format: email
- *                   example: "user@example.com"
- *                   description: Endereço de e-mail do usuário.
+ *               $ref: '#/components/schemas/User'
  *       400:
- *         description: Bad credentials
+ *         description: Bad Request, invalid data supplied
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 type:
- *                   type: string
- *                   example: "Validation Error"
- *                   description: Tipo de erro.
- *                 errors:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       resource:
- *                         type: string
- *                         example: "email"
- *                         description: O campo onde ocorreu o erro.
- *                       message:
- *                         type: string
- *                         example: "invalid email"
- *                         description: Mensagem de erro detalhada.
- *             example:
- *               type: "Validation Error"
- *               errors:
- *                 - resource: "email"
- *                   message: "invalid email"
+ *               $ref: '#/components/schemas/ValidationError'
  *       500:
- *         description: Erro interno do servidor.
+ *         description: Server error
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 statusCode:
- *                   type: integer
- *                   example: 500
- *                 message:
- *                   type: string
- *                   example: "Internal server error"
- *                 error:
- *                   type: string
- *                   example: "Server Error"
+ *               $ref: '#/components/schemas/InternalServerError'
  */
 
 export default router;
