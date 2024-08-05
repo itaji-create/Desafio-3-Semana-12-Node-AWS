@@ -5,8 +5,8 @@
   "scripts": {
     "start": "node build/shared/http/server.js",
     "build": "babel src --extensions \".js,.ts\" --out-dir build --copy-files",
-    "test": "cross-env NODE_ENV=test jest",
-    "test-coverage": "cross-env NODE_ENV=test jest --coverage",
+    "test": "cross-env NODE_ENV=test jest --runInBand",
+    "test-coverage": "cross-env NODE_ENV=test jest --runInBand --coverage",
     "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/shared/http/server.ts",
     "lint": "eslint . --ext .ts",
     "lint-fix": "eslint . --ext .ts --fix"
