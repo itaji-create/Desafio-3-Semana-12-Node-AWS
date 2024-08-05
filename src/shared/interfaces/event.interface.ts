@@ -13,4 +13,9 @@ interface IEvent extends Document {
   userId: Schema.Types.ObjectId;
 }
 
-export type { IEvent };
+interface IEventFilters {
+  dayOfWeek?: string;
+  description?: string;
+}
+
+export type { IEvent, IEventFilters };
