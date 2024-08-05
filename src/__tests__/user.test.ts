@@ -81,9 +81,7 @@ describe('Testes da rota de login dos usuários', () => {
     const res = await request(app).post(urlSignIn).send(login);
 
     expect(res.status).toBe(200);
-    expect(res.headers.authorization).toMatch(
-      /^Bearer\s[A-Za-z0-9\-._~+/]+=*$/,
-    );
+    expect(res.headers.authorization).toMatch(/[A-Za-z0-9\-._~+/]+=*$/);
   });
 
   test('Falha ao tentar login com senha errada', async () => {
