@@ -1,21 +1,14 @@
 import { Router } from 'express';
-import {
-  createEvent,
-  deleteEventById,
-  getEventById,
-  getEvents,
-} from '../controllers/events.controllers';
-import { authenticateToken } from '../middlewares/token.authenticate';
-import { validateEvent } from '../middlewares/event.validator';
+import getEventsRoute from './getEvents.route';
+import createEventRoute from './createEvent.route';
+import deleteEventByIdRoute from './deleteEventById.route';
+import getEventByIdRoute from './getEventById.route';
 
 const eventsRouter = Router();
 
-eventsRouter.get('/', authenticateToken, getEvents);
-
-eventsRouter.get('/:id', authenticateToken, getEventById);
-
-eventsRouter.post('/', authenticateToken, validateEvent, createEvent);
-
-eventsRouter.delete('/:id', authenticateToken, deleteEventById);
+eventsRouter.use('/', getEventsRoute);
+eventsRouter.use('/', createEventRoute);
+eventsRouter.use('/', deleteEventByIdRoute);
+eventsRouter.use('/', getEventByIdRoute);
 
 export default eventsRouter;
