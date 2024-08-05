@@ -1,49 +1,39 @@
 import { Router } from 'express';
 import { authenticateToken } from '../middlewares/token.authenticate';
-import { getEvents } from '../controllers/events.controllers';
+import { deleteEventsByDayOfWeek } from '../controllers/events.controllers';
 
 const router = Router();
 
-router.get('/', authenticateToken, getEvents);
+router.delete('/', authenticateToken, deleteEventsByDayOfWeek);
 
 /**
- * @openapi
+ * @swagger
  * /events:
- *   get:
- *     summary: Retrieve events
- *     description: Retrieve a list of events. You can filter events by description and day of the week.
- *     tags:
- *       - Events
+ *   delete:
+ *     summary: Delete all events by dayOfWeek
+ *     description: Delete all events for the specified dayOfWeek.
+ *     tags: [Events]
  *     security:
  *       - TokenAuth: []
  *     parameters:
  *       - in: query
- *         name: description
- *         schema:
- *           type: string
- *         description: Filter events by description
- *       - in: query
  *         name: dayOfWeek
+ *         required: true
  *         schema:
  *           type: string
- *           enum:
- *             - sunday
- *             - monday
- *             - tuesday
- *             - wednesday
- *             - thursday
- *             - friday
- *             - saturday
- *         description: Filter events by day of the week
+ *           enum: [sunday, monday, tuesday, wednesday, thursday, friday, saturday]
+ *         description: The day of the week to delete events for
  *     responses:
  *       200:
- *         description: A list of events
+ *         description: Events deleted successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Event'
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Deleted X events for dayOfWeek: sunday"
  *       400:
  *         description: Bad Request, invalid data supplied
  *         content:
@@ -69,5 +59,4 @@ router.get('/', authenticateToken, getEvents);
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-
 export default router;
