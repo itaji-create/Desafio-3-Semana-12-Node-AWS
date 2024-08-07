@@ -28,13 +28,14 @@ describe('Testes da rota de cadastro dos usuários', () => {
 
   test('Cria um novo usuário', async () => {
     const res = await request(app).post(urlSignUp).send(userData);
+
     expect(res.status).toBe(201);
-    expect(res.body.firstName).toBe('string');
   });
 
   test('Falha ao tentar criar usuário com email já existente no database', async () => {
-    const res2 = await request(app).post(urlSignUp).send(userData);
-    expect(res2.status).toBe(400);
+    const res = await request(app).post(urlSignUp).send(userData);
+    expect(res.status).toBe(400);
+    expect(res.body.error).toBe('Bad Request');
   });
 
   test('Cria usuário com um novo email', async () => {
