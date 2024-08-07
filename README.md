@@ -36,6 +36,11 @@ npm install
 MONGODB_URI=mongodb://localhost:27017/database
 NODE_ENV=prod
 PORT=3000
+
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_SESSION_TOKEN=
+AWS_BUCKET_NAME=
 ```
 
 4. Transpile o código TypeScript:
@@ -56,6 +61,8 @@ npm start
 npm run dev
 ```
 
+Após iniciar os serviços, a aplicação estará disponível no endereço http://localhost:3000/api-docs/#/
+
 ## 🚀 Iniciando a aplicação com Docker
 
 #### Pré-requisitos
@@ -70,7 +77,16 @@ git clone https://github.com/itaji-create/Desafio-3-Semana-12-Node-AWS.git
 cd Desafio-3-Semana-12-Node-AWS
 ```
 
-2. Inicie os serviços utilizando o Docker Compose:
+2. Crie um arquivo .env na raiz do projeto com as variáveis de ambiente necessárias:
+
+```env
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_SESSION_TOKEN=
+AWS_BUCKET_NAME=
+```
+
+3. Inicie os serviços utilizando o Docker Compose:
 
 Na raiz do projeto, execute o comando:
 
@@ -78,7 +94,7 @@ Na raiz do projeto, execute o comando:
 docker-compose up --build
 ```
 
-3. Acesse a aplicação:
+4. Acesse a aplicação:
 
 Após iniciar os serviços, a aplicação estará disponível no endereço http://localhost:3000/api-docs/#/
 
@@ -142,8 +158,6 @@ npm run lint-fix
 
 - ``Express``: Framework web para Node.js, utilizado para construir APIs robustas e eficientes.
 
-- ``MongoDB``: Banco de dados NoSQL utilizado para armazenar dados de maneira flexível e escalável.
-
 - ``Mongoose``: Biblioteca de modelagem de objetos do MongoDB para Node.js, que facilita o trabalho com o banco de dados.
 
 - ``Jest``: Framework de testes, utilizado para realizar testes de integração.
@@ -168,6 +182,10 @@ npm run lint-fix
 
 - ``ts-node-dev``: Ferramenta para rodar e monitorar aplicações TypeScript em desenvolvimento, reiniciando automaticamente o servidor ao detectar mudanças no código.
 
+- ``Docker``: Plataforma que permite criar, implantar e executar aplicações em contêineres, proporcionando uma forma consistente de empacotar e distribuir software em diferentes ambientes. Docker isola as aplicações e suas dependências em contêineres, garantindo que funcionem da mesma forma em qualquer lugar.
+
+- ``Docker Compose``: Ferramenta para definir e gerenciar aplicações multi-contêineres. Usando um arquivo de configuração YAML, o Docker Compose permite configurar serviços, redes e volumes, facilitando o desenvolvimento e a orquestração de aplicações complexas que consistem em vários contêineres Docker.
+
 ## 🔨 Funcionalidades do projeto
 
 ### Users
@@ -175,6 +193,55 @@ npm run lint-fix
 - `Cadastro de usuários`: Permite que novos usuários se registrem na plataforma fornecendo informações necessárias, como nome, e-mail, senha e outros dados relevantes. Este processo inclui a validação dos dados fornecidos para garantir que são válidos e que p email é único, evitando duplicidades ao fazer o login e garantindo a integridade do sistema.
 
 - `Login de usuário`: Permite que os usuários registrados entrem na plataforma utilizando suas credenciais (e-mail e senha). O processo de login envolve a autenticação dos dados fornecidos, garantindo que apenas usuários autorizados tenham acesso às funcionalidades protegidas da aplicação. A autenticação é realizada utilizando tokens JWT, proporcionando segurança e facilidade no gerenciamento de sessões de usuário.
+
+- `Armazenamento de Foto de Perfil`: Permite que os usuários carreguem e atualizem suas fotos de perfil na plataforma. Quando um usuário deseja atualizar sua foto de perfil, o sistema gera uma URL pré-assinada para o upload da imagem diretamente para um bucket S3.
+
+### Passo a passo para Carregar uma Foto de Perfil
+
+1. Gerar a URL para Upload:
+Primeiro, você precisa gerar uma URL pré-assinada que permitirá o upload da sua imagem para o bucket S3. Para isso, faça uma requisição GET para a seguinte URL:
+
+```bash
+http://localhost:3000/users/generate-upload-url?fileName=novoArquivo&fileType=image/jpg
+```
+
+#### Explicação dos parâmetros:
+
+* ``fileName=novoArquivo``: Substitua novoArquivo pelo nome desejado para o arquivo da imagem.
+
+* ``fileType=image/jpg``: O valor image/jpg indica o tipo MIME da imagem que você está carregando. Certifique-se de substituir image/jpg pelo tipo MIME correto da sua imagem (por exemplo, image/png para PNG).
+
+#### Resposta esperada:
+Caso suas variáveis de ambiente estejam configuradas corretamente você receberá uma URL pré-assinada na resposta, algo parecido com:
+
+```json
+{
+  "uploadUrl": "https://your-s3-bucket.s3.amazonaws.com/novoArquivo?AWSAccessKeyId=...&Expires=...&Signature=..."
+}
+```
+Copie essa URL, pois você usará ela na próxima etapa.
+
+2. Fazer o Upload da Imagem
+Agora que você tem a URL pré-assinada, você pode fazer o upload da sua imagem para o bucket S3. Siga estas instruções:
+
+#### Configurar a Requisição:
+
+* Método HTTP: `PUT`
+* URL: Use a URL pré-assinada que você copiou da resposta anterior.
+* Cabeçalhos:
+  *  Adicione o cabeçalho Content-Type com o mesmo valor informado na requisição inicial (por exemplo, image/jpg).
+
+#### Exemplo de Configuração da Requisição usando o Postman:
+
+* Selecione o método PUT.
+* Cole a URL pré-assinada no campo de URL.
+* No cabeçalho, adicione Content-Type com o valor image/jpg.
+* Vá para a aba Body, selecione binary, e escolha o arquivo da imagem que você deseja enviar.
+
+3. Confirmar o Upload
+
+Após enviar o request, o S3 deve confirmar o upload com uma resposta de sucesso, status code 200.
+
 
 ### Events
 
