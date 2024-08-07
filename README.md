@@ -9,6 +9,20 @@
 * [Tecnologias utilizadas](#️-tecnologias-utilizadas)
 * [Funcionalidades do projeto](#-funcionalidades-do-projeto)
 
+## Acesso ao Swagger
+
+#### Documentação Swagger
+  Essa aplicação está rodando em uma máquina ec2, você pode acessá-la com o a url abaixo
+
+  * URL de Acesso
+
+  ```bash
+  http://3.83.246.169:3000/api-docs/#/
+  ```
+
+  * Navegação na Documentação:
+  A documentação Swagger permite que você visualize e interaja com a API da sua aplicação. Você pode navegar pelas diferentes rotas, visualizar detalhes de endpoints, e testar as APIs diretamente da interface Swagger.
+
 ## 🚀 Iniciando a aplicação localmente
 
 #### Pré-requisitos
@@ -36,6 +50,7 @@ npm install
 MONGODB_URI=mongodb://localhost:27017/database
 NODE_ENV=prod
 PORT=3000
+HOST=localhost
 
 AWS_ACCESS_KEY_ID=
 AWS_SECRET_ACCESS_KEY=
@@ -221,7 +236,7 @@ Caso suas variáveis de ambiente estejam configuradas corretamente você receber
 ```
 Copie essa URL, pois você usará ela na próxima etapa.
 
-2. Fazer o Upload da Imagem
+2. Fazer o Upload da Imagem:
 Agora que você tem a URL pré-assinada, você pode fazer o upload da sua imagem para o bucket S3. Siga estas instruções:
 
 #### Configurar a Requisição:
